@@ -6,20 +6,20 @@ function tablefind(tab, el)
             return index
         end
     end
-    
+
     return nil
 end
 
 function countBots()
     local count = 0
-    
+
     for index, value in pairs(players) do
         local isBot = game:isbot(value)
         if isBot == 1 then
             count = count + 1
         end
     end
-    
+
     return count
 end
 
@@ -36,15 +36,37 @@ function kickPlayer(player)
 end
 
 function kickLeftoverBot(player)
-    local timer = game:ontimeout(function()kickPlayer(player) end, 10000)
-    local timer2 = player:onnotifyonce("spawned_player", function()timer:clear() end)
-    player:onnotifyonce("disconnect", function()timer2:clear() end)
+    local timer =
+        game:ontimeout(
+        function()
+            kickPlayer(player)
+        end,
+        10000
+    )
+    local timer2 =
+        player:onnotifyonce(
+        "spawned_player",
+        function()
+            timer:clear()
+        end
+    )
+    player:onnotifyonce(
+        "disconnect",
+        function()
+            timer2:clear()
+        end
+    )
 end
 
 function player_connected(player)
-    player:onnotifyonce("disconnect", function()removePlayer(player) end)
+    player:onnotifyonce(
+        "disconnect",
+        function()
+            removePlayer(player)
+        end
+    )
     table.insert(players, player)
-    
+
     local isBot = game:isbot(player)
     if isBot == 1 then
         player:botsetdifficulty("default")
@@ -63,11 +85,11 @@ function kickBot()
 end
 
 function spawnBot()
-    game:executecommand("spawnbot 1");
+    game:executecommand("spawnbot 1")
 end
 
 function monitor()
-    local count = #players;
+    local count = #players
     local botCount = countBots()
     if count < 10 and botCount < 5 then
         spawnBot()
@@ -81,7 +103,7 @@ function startLogic()
 end
 
 if game:getdvar("gamemode") == "mp" then
-    game:executecommand("spawnbot 4");
+    game:executecommand("spawnbot 4")
     level:onnotifyonce("matchStartTimer", startLogic)
     level:onnotify("connected", player_connected)
 end
