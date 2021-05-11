@@ -55,12 +55,7 @@ function player_connected(player)
 			on_first_spawn(player)
 		end
 	)
-	player:onnotifyonce(
-		"disconnect",
-		function()
-			timer:clear()
-		end
-	)
+	timer:endon(player, "disconnect")
 end
 
 if game:getdvar("gamemode") == "mp" then

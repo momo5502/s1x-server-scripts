@@ -43,19 +43,7 @@ function kickLeftoverBot(player)
         end,
         10000
     )
-    local timer2 =
-        player:onnotifyonce(
-        "spawned_player",
-        function()
-            timer:clear()
-        end
-    )
-    player:onnotifyonce(
-        "disconnect",
-        function()
-            timer2:clear()
-        end
-    )
+    timer:endon(player, "spawned_player")
 end
 
 function player_connected(player)
@@ -91,7 +79,7 @@ end
 function monitor()
     local count = #players
     local botCount = countBots()
-    if count < 10 and botCount < 5 then
+    if count < 10 and botCount < 6 then
         spawnBot()
     elseif count > 14 and botCount > 0 then
         kickBot()
@@ -103,7 +91,7 @@ function startLogic()
 end
 
 if game:getdvar("gamemode") == "mp" then
-    game:executecommand("spawnbot 4")
+    game:executecommand("spawnbot 6")
     level:onnotifyonce("matchStartTimer", startLogic)
     level:onnotify("connected", player_connected)
 end

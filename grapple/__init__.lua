@@ -16,12 +16,7 @@ function player_connected(player)
             watch_exo_ability(player, weapon)
         end
     )
-    player:onnotifyonce(
-        "disconnect",
-        function()
-            timer:clear()
-        end
-    )
+    timer:endon(player, "disconnect")
 end
 
 if game:getdvar("gamemode") == "mp" then
